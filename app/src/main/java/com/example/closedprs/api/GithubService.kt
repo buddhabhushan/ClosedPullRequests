@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface GithubService {
 
-    @GET("")
+    @GET("htops")
     fun getPullRequests() : Response<List<PullRequest>>
 }
