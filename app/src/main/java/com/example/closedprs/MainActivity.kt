@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import okhttp3.internal.wait
 
 // Adding new lines just to increase the number of cards
+// New line
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
