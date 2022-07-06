@@ -17,9 +17,10 @@ import com.example.closedprs.ui.theme.ClosedPRsTheme
 import kotlinx.coroutines.delay
 import okhttp3.internal.wait
 
-// Adding new lines just to increase the number of cards
+// Adding new lines just to increase the number of cards and commits
 // New line
 // New line 1
+// New line 2
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
