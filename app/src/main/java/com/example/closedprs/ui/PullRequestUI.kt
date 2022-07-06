@@ -45,7 +45,6 @@ fun PullRequestsUI(
             }
         }
     }
-
 }
 
 @Composable
