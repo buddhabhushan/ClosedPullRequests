@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -35,27 +36,13 @@ fun PullRequestsUI(
         LazyColumn {
             itemsIndexed(pullRequests) { _, pullRequest ->
                 PullRequest(
-                    imgUrl = pullRequest.closed_by?.avatar_url ?: "",
+                    imgUrl = pullRequest.merged_by?.avatar_url ?: "",
                     title = pullRequest.title,
-                    userName = pullRequest.closed_by?.login ?: "",
+                    userName = pullRequest.merged_by?.login ?: "",
                     createdDate = DateConverter.convertDate(pullRequest.created_at),
                     closedDate = DateConverter.convertDate(pullRequest.closed_at),
                 )
             }
-        }
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        pullRequests?.forEach { pullRequest ->
-            PullRequest(
-                imgUrl = pullRequest.closed_by?.avatar_url,
-                title = pullRequest.title,
-                userName = pullRequest.closed_by?.login ?: "",
-                createdDate = DateConverter.convertDate(pullRequest.created_at),
-                closedDate = DateConverter.convertDate(pullRequest.closed_at),
-            )
         }
     }
 
@@ -81,12 +68,13 @@ fun PullRequest(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
+                painter = rememberAsyncImagePainter(imgUrl),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
-                    .border(width = 2.dp, color = Color.Red),
-                painter = rememberAsyncImagePainter(imgUrl),
-                contentDescription = null,
+                    .border(width = 2.dp, color = Color.Red, shape = CircleShape),
             )
             Spacer(Modifier.size(8.dp))
             Column(
