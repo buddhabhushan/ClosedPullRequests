@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.closedprs.repository.Repository
 import com.example.closedprs.ui.PullRequestsUI
 import com.example.closedprs.ui.theme.ClosedPRsTheme
+import kotlinx.coroutines.delay
+import okhttp3.internal.wait
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +24,10 @@ class MainActivity : ComponentActivity() {
         val repository = Repository()
         val viewModelFactory = PullRequestViewModelFactory(repository)
         val viewModel = ViewModelProvider(this, viewModelFactory)[PullRequestViewModel::class.java]
-        viewModel.getPullRequests()
+        val response = viewModel.getPullRequests()
+
+        println("TESTING:  " + viewModel.myResponse.value.toString())
+
 
         setContent {
             ClosedPRsTheme {
@@ -31,8 +36,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    if(viewModel.myResponse.value?.isSuccessful == true)
-                        PullRequestsUI(viewModel.myResponse.value!!.body())
+                    PullRequestsUI(viewModel)
                 }
             }
         }
