@@ -17,6 +17,8 @@ import com.example.closedprs.ui.theme.ClosedPRsTheme
 import kotlinx.coroutines.delay
 import okhttp3.internal.wait
 
+// Adding new lines just to increase the number of cards
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
