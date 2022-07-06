@@ -1,17 +1,13 @@
 package com.example.closedprs.model
 
-class PullRequestResponse(
-    val pullRequests: List<PullRequest>
-)
-
-class PullRequest (
+data class PullRequest(
+    val closed_at: String,
+    val created_at: String,
+    val closed_by: ClosedBy?,
     val title: String,
-    val userName: String,
-    val createdAt: String,
-    val closedAt: String,
-    val creator: Creator,
 )
 
-class Creator (
-    val imageUrl: String,
+data class ClosedBy(
+    val avatar_url: String?,
+    val login: String?,
 )

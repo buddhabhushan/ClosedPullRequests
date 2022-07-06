@@ -1,29 +1,60 @@
 package com.example.closedprs.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.closedprs.model.PullRequest
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import com.example.closedprs.PullRequestViewModel
+import com.example.closedprs.util.DateConverter
 
 @Composable
 fun PullRequestsUI(
-    pullRequests: List<PullRequest>?,
+    viewModel: PullRequestViewModel,
 ) {
+    val pullRequests = viewModel.myResponse.observeAsState().value
+
+    if(pullRequests != null) {
+        LazyColumn {
+            itemsIndexed(pullRequests) { _, pullRequest ->
+                PullRequest(
+                    imgUrl = pullRequest.closed_by?.avatar_url ?: "",
+                    title = pullRequest.title,
+                    userName = pullRequest.closed_by?.login ?: "",
+                    createdDate = DateConverter.convertDate(pullRequest.created_at),
+                    closedDate = DateConverter.convertDate(pullRequest.closed_at),
+                )
+            }
+        }
+    }
+
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     ) {
         pullRequests?.forEach { pullRequest ->
             PullRequest(
-                imgUrl = pullRequest.creator.imageUrl,
+                imgUrl = pullRequest.closed_by?.avatar_url,
                 title = pullRequest.title,
-                userName = pullRequest.userName,
-                createdDate = pullRequest.createdAt,
-                closedDate = pullRequest.closedAt,
+                userName = pullRequest.closed_by?.login ?: "",
+                createdDate = DateConverter.convertDate(pullRequest.created_at),
+                closedDate = DateConverter.convertDate(pullRequest.closed_at),
             )
         }
     }
@@ -32,43 +63,67 @@ fun PullRequestsUI(
 
 @Composable
 fun PullRequest(
-    imgUrl: String,
+    imgUrl: String? = "https://avatars.githubusercontent.com/u/35566875?v=4" ,
     title: String,
     userName: String,
     createdDate: String,
     closedDate: String,
 ) {
-    Card {
-        Row {
-            Column {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        contentColor = Color.Gray,
+        backgroundColor = Color.Yellow,
+    ) {
+        Row(
+            modifier = Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .border(width = 2.dp, color = Color.Red),
+                painter = rememberAsyncImagePainter(imgUrl),
+                contentDescription = null,
+            )
+            Spacer(Modifier.size(8.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
                     text = title,
-                    style = TextStyle.Default,
+                    style = TextStyle.Default.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                    ),
                     color = Color.Blue,
                 )
                 Spacer(Modifier.size(8.dp))
-                Text(
-                    text = userName,
-                    style = TextStyle.Default,
-                    color = Color.Blue,
-                )
-                Spacer(Modifier.size(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
+                if(userName != "") {
                     Text(
-                        text = createdDate,
-                        style = TextStyle.Default,
-                        color = Color.Blue,
-                    )
-                    Spacer(Modifier.size(8.dp))
-                    Text(
-                        text = closedDate,
-                        style = TextStyle.Default,
+                        text = userName,
+                        style = TextStyle.Default.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                        ),
                         color = Color.Blue,
                     )
                     Spacer(Modifier.size(8.dp))
                 }
+                Text(
+                    text = "Created At: $createdDate",
+                    style = TextStyle.Default,
+                    color = Color.Blue,
+                )
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = "Closed At: $closedDate",
+                    style = TextStyle.Default,
+                    color = Color.Blue,
+                )
+
             }
         }
     }

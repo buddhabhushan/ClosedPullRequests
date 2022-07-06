@@ -8,5 +8,5 @@ import retrofit2.http.Query
 interface GithubService {
 
     @GET("buddhabhushan/ClosedPullRequests/pulls")
-    fun getPullRequests(@Query(value = "state") STATE: String) : Response<List<PullRequest>>
+    suspend fun getPullRequests(@Query(value = "state") state: String) : Response<List<PullRequest>>
 }
