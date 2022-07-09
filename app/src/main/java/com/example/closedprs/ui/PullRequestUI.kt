@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.closedprs.PullRequestViewModel
 import com.example.closedprs.util.DateConverter
 
@@ -45,10 +46,13 @@ fun PullRequestsUI(
         )
 
         if (pullRequests != null) {
-            LazyColumn {
+            LazyColumn(
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 itemsIndexed(pullRequests) { _, pullRequest ->
                     PullRequest(
-                        imgUrl = pullRequest.merged_by?.avatar_url ?: "",
+                        imgUrl = pullRequest.merged_by?.avatar_url,
                         title = pullRequest.title,
                         userName = pullRequest.merged_by?.login ?: "",
                         createdDate = DateConverter.convertDate(pullRequest.created_at),
@@ -73,7 +77,6 @@ fun PullRequest(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
             .clip(RoundedCornerShape(8.dp)),
         contentColor = Color.Gray,
         backgroundColor = Color.Yellow,
