@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
         val repository = Repository()
         val viewModelFactory = PullRequestViewModelFactory(repository)
         val viewModel = ViewModelProvider(this, viewModelFactory)[PullRequestViewModel::class.java]
-        val response = viewModel.getPullRequests()
 
         println("TESTING:  " + viewModel.myResponse.value.toString())
 

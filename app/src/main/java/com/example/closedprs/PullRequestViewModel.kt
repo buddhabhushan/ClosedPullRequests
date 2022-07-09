@@ -13,6 +13,10 @@ class PullRequestViewModel(
     private val repository: Repository
 ): ViewModel() {
 
+    init {
+        getPullRequests()
+    }
+
     val myResponse: MutableLiveData<List<PullRequest>> = MutableLiveData()
 
     fun getPullRequests() {
